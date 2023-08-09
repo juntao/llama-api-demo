@@ -25,7 +25,7 @@ jobs:
       run: |
         sudo ACCEPT_EULA=Y apt-get update
         sudo ACCEPT_EULA=Y apt-get upgrade
-        sudo apt-get install git curl software-properties-common build-essential libopenblas-dev ninja-build
+        sudo apt-get install git curl software-properties-common build-essential libopenblas-dev ninja-build pkg-config cmake-data
 
     - name: Download model weights
       run:
