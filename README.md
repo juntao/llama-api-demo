@@ -21,7 +21,7 @@ Make sure that you have dev tools including the C++ compiler toolchain and Pytho
 ```bash
 sudo ACCEPT_EULA=Y apt-get update
 sudo ACCEPT_EULA=Y apt-get upgrade
-sudo apt-get install git curl software-properties-common build-essential libopenblas-dev ninja-build
+sudo apt-get install git curl software-properties-common build-essential libopenblas-dev ninja-build pkg-config cmake-data
 sudo apt-get install python3 python3-pip python-is-python3
 ```
 
