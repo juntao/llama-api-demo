@@ -93,7 +93,18 @@ PREFIX_ENV_VARS pip install llama-cpp-python --force-reinstall --upgrade --no-ca
 
 ### GPU
 
-Install Nvidia driver.
+[Install Nvidia and CUDA driver](https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts) for AWS `g5` series (Tesla GPUs).
+
+```bash
+sudo apt-get install linux-headers-$(uname -r)
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID | sed -e 's/\.//g')
+wget https://developer.download.nvidia.com/compute/cuda/repos/$distribution/x86_64/cuda-keyring_1.0-1_all.deb
+sudo dpkg -i cuda-keyring_1.0-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cuda-drivers
+```
+
+Install tools.
 
 ```bash
 sudo apt install nvidia-utils-535-server nvidia-prime
