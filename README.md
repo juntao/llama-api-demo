@@ -95,3 +95,18 @@ The response is
 }
 ```
 
+## GPU notes
+
+Install Nvidia driver.
+
+```bash
+sudo apt install nvidia-utils-535-server
+```
+
+Check GPU stat.
+
+```bash
+nvidia-smi -l 1
+```
+
+You may need to re-compile and restart the server after loading the GPU driver.
