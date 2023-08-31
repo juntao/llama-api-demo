@@ -8,12 +8,6 @@ Here is a llama2 7B model with 32K context length:
 curl -s -L --remote-name-all https://huggingface.co/rozek/LLaMA-2-7B-32K_GGUF/resolve/main/LLaMA-2-7B-32K-Q4_0.gguf
 ```
 
-Here is a llama2 13B chat model:
-
-```bash
-https://huggingface.co/akarshanbiswas/llama-2-chat-13b-gguf/resolve/main/ggml-llama-2-13b-chat-q4_k_m.gguf
-```
-
 ## Setup the software on Ubuntu
 
 Make sure that you have dev tools including the C++ compiler toolchain and Python installed.
@@ -35,12 +29,6 @@ Build `llama.cpp` and install its Python wrapper package.
 
 ```bash
 CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" FORCE_CMAKE=1 pip install llama-cpp-python
-```
-
-Or, if you have installed it before, do this to reinstall
-
-```bash
-CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" FORCE_CMAKE=1 pip install llama-cpp-python --force-reinstall --upgrade --no-cache-dir
 ```
 
 ## Run the API server
@@ -95,7 +83,15 @@ The response is
 }
 ```
 
-## GPU notes
+## Notes
+
+If you have installed `llama-cpp-python` before, do this to reinstall
+
+```bash
+PREFIX_ENV_VARS pip install llama-cpp-python --force-reinstall --upgrade --no-cache-dir
+```
+
+### GPU
 
 Install Nvidia driver.
 
@@ -110,4 +106,25 @@ Check GPU stat.
 nvidia-smi -l 1
 ```
 
-You may need to re-compile and restart the server after loading the GPU driver.
+You may need to re-compile and restart the server after loading the GPU driver. Nvidia GPU support is available through CUDA cuBLAS.
+
+```bash
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
+```
+
+### Mac
+
+To run on Apple Silicon, you need to compile `llama.cpp` using the Metal settings.
+
+```bash
+CMAKE_ARGS="-DLLAMA_METAL=on" FORCE_CMAKE=1 pip install llama-cpp-python
+```
+
+### Additional models
+
+A llama2 13B chat model:
+
+```bash
+https://huggingface.co/akarshanbiswas/llama-2-chat-13b-gguf/resolve/main/ggml-llama-2-13b-chat-q4_k_m.gguf
+```
+
