@@ -2,16 +2,16 @@
 
 ## Download a model
 
-Here is a llama2 7B chat model file:
+Here is a llama2 7B model with 32K context length:
 
 ```bash
-curl -s -L --remote-name-all https://huggingface.co/localmodels/Llama-2-7B-Chat-ggml/resolve/main/llama-2-7b-chat.ggmlv3.q4_0.bin
+curl -s -L --remote-name-all https://huggingface.co/rozek/LLaMA-2-7B-32K_GGUF/resolve/main/LLaMA-2-7B-32K-Q4_0.gguf
 ```
 
-Here is an alpaca-lora 65B model:
+Here is a llama2 13B chat model:
 
 ```bash
-curl -s -L --remote-name-all https://huggingface.co/TheBloke/alpaca-lora-65B-GGML/resolve/main/alpaca-lora-65B.ggmlv3.q5_1.bin
+https://huggingface.co/akarshanbiswas/llama-2-chat-13b-gguf/resolve/main/ggml-llama-2-13b-chat-q4_k_m.gguf
 ```
 
 ## Setup the software on Ubuntu
@@ -37,10 +37,16 @@ Build `llama.cpp` and install its Python wrapper package.
 CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" FORCE_CMAKE=1 pip install llama-cpp-python
 ```
 
+Or, if you have installed it before, do this to reinstall
+
+```bash
+CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" FORCE_CMAKE=1 pip install llama-cpp-python --force-reinstall --upgrade --no-cache-dir
+```
+
 ## Run the API server
 
 ```bash
-nohup python3 -m llama_cpp.server --model llama-2-7b-chat.ggmlv3.q4_0.bin --n_ctx 2048 --host 0.0.0.0 --port 8000 &
+nohup python3 -m llama_cpp.server --model LLaMA-2-7B-32K-Q4_0.gguf --n_ctx 2048 --host 0.0.0.0 --port 8000 &
 ```
 
 ## Test the API
@@ -51,7 +57,7 @@ Try the CLI command to test the API server.
 curl -X GET http://localhost:8000/v1/models \
   -H 'accept: application/json'
 
-{"object":"list","data":[{"id":"vendor/llama.cpp/models/7B/ggml-model-q4_0.bin","object":"model","owned_by":"me","permissions":[]}]}
+{"object":"list","data":[{"id":"LLaMA-2-7B-32K-Q4_0.gguf","object":"model","owned_by":"me","permissions":[]}]}
 ```
 
 Send in an HTTP API request to prompt the model and ask it to answer a question.
@@ -70,7 +76,7 @@ The response is
   "id": "chatcmpl-0cfe6cdf-28be-4bb0-a39e-9572e678c0d1",
   "object": "chat.completion",
   "created": 1690825931,
-  "model": "/llama-cpp-python/vendor/llama.cpp/models/7B/ggml-model-q4_0.bin",
+  "model": "LLaMA-2-7B-32K-Q4_0.gguf",
   "choices": [
     {
       "index": 0,
