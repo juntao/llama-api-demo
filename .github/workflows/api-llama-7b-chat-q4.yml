@@ -27,9 +27,9 @@ jobs:
         sudo ACCEPT_EULA=Y apt-get upgrade
         sudo apt-get install git curl software-properties-common build-essential libopenblas-dev ninja-build pkg-config cmake-data
 
-    - name: Download model weights
+    - name: Download model file in GGUF
       run:
-        curl -s -L --remote-name-all https://huggingface.co/localmodels/Llama-2-7B-Chat-ggml/resolve/main/llama-2-7b-chat.ggmlv3.q4_0.bin
+        curl -s -L --remote-name-all https://huggingface.co/rozek/LLaMA-2-7B-32K_GGUF/resolve/main/LLaMA-2-7B-32K-Q4_0.gguf
 
     - uses: actions/setup-python@v4
       with:
@@ -45,7 +45,7 @@ jobs:
 
     - name: Run the API server
       run: |
-        nohup python3 -m llama_cpp.server --model llama-2-7b-chat.ggmlv3.q4_0.bin --n_ctx 2048 &
+        nohup python3 -m llama_cpp.server --model LLaMA-2-7B-32K-Q4_0.gguf --n_ctx 2048 &
         echo $! > ../../backend.pid
         sleep 20
 
