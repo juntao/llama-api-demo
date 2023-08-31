@@ -100,7 +100,8 @@ The response is
 Install Nvidia driver.
 
 ```bash
-sudo apt install nvidia-utils-535-server
+sudo apt install nvidia-utils-535-server nvidia-prime
+sudo prime-select nvidia
 ```
 
 Check GPU stat.
