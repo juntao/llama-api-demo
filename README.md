@@ -93,7 +93,7 @@ PREFIX_ENV_VARS pip install llama-cpp-python --force-reinstall --upgrade --no-ca
 
 ### GPU
 
-[Install Nvidia and CUDA driver](https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts) for AWS `g5` series (Tesla GPUs).
+[Install Nvidia and CUDA driver](https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts) for [AWS `g5` series](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-nvidia-driver.html#gpu-instance-install-cuda) (Tesla GPUs).
 
 ```bash
 sudo apt-get install linux-headers-$(uname -r)
@@ -104,11 +104,19 @@ sudo apt-get update
 sudo apt-get -y install cuda-drivers
 ```
 
-Install tools.
+[Install CUDA tools](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_network).
 
 ```bash
-sudo apt install nvidia-utils-535-server nvidia-prime
-sudo prime-select nvidia
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+sudo dpkg -i cuda-keyring_1.1-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cuda
+```
+
+Then, add CUDA to the system path. Add the following line to `~/.profile` or `~/.bashrc`.
+
+```bash
+PATH="/usr/local/cuda/bin:$PATH"
 ```
 
 Check GPU stat.
@@ -117,11 +125,25 @@ Check GPU stat.
 nvidia-smi -l 1
 ```
 
+Make sure that the tools are installed.
+
+```bash
+nvcc --version
+```
+
 You may need to re-compile and restart the server after loading the GPU driver. Nvidia GPU support is available through CUDA cuBLAS.
 
 ```bash
 CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
 ```
+
+Then, when you start the server, you also need to add the `--n_gpu_layers 100` flag to specify that you want to move up to 100 layers of the model to the GPU.
+
+```bash
+nohup python3 -m llama_cpp.server --model LLaMA-2-7B-32K-Q4_0.gguf --n_gpu_layers 100 --n_ctx 2048 --host 0.0.0.0 --port 8000 &
+```
+
+> If you are running `llama.cpp` from the command line by calling `main`, you should add `-ngl 100` to specify the layers to run on the GPU.
 
 ### Mac
 
@@ -131,6 +153,24 @@ To run on Apple Silicon, you need to compile `llama.cpp` using the Metal setting
 CMAKE_ARGS="-DLLAMA_METAL=on" FORCE_CMAKE=1 pip install llama-cpp-python
 ```
 
+### huggingface
+
+```bash
+sudo apt install git-lfs
+git lfs install
+```
+
+Then download any model by cloning its GIT repo. 
+
+> Your username and password are required for private repos that you have access to. The password here is your password to log into huggingface web site. It is NOT the huggingface access token.
+
+```bash
+git clone https://huggingface.co/meta-llama/Llama-2-7b-chat
+Cloning into 'Llama-2-7b-chat'...
+Username for 'https://huggingface.co': my-hf-username
+Password for 'https://my-hf-username@huggingface.co': my-hf-password
+```
+
 ### Additional models
 
 A llama2 13B chat model:
@@ -138,4 +178,6 @@ A llama2 13B chat model:
 ```bash
 https://huggingface.co/akarshanbiswas/llama-2-chat-13b-gguf/resolve/main/ggml-llama-2-13b-chat-q4_k_m.gguf
 ```
+
+
 
