@@ -109,6 +109,7 @@ Then, add CUDA to the system path. Add the following line to `~/.profile` or `~/
 
 ```bash
 PATH="/usr/local/cuda/bin:$PATH"
+LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
 ```
 
 Check GPU stat.
