@@ -93,24 +93,16 @@ PREFIX_ENV_VARS pip install llama-cpp-python --force-reinstall --upgrade --no-ca
 
 ### GPU
 
-[Install Nvidia and CUDA driver](https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts) for [AWS `g5` series](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-nvidia-driver.html#gpu-instance-install-cuda) (Tesla GPUs).
+Install [Nvidia and CUDA driver](https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html#ubuntu-lts) for [AWS `g5` series](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-nvidia-driver.html#gpu-instance-install-cuda) (Tesla GPUs), and [CUDA developer tools](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_network).
 
 ```bash
-sudo apt-get install linux-headers-$(uname -r)
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID | sed -e 's/\.//g')
-wget https://developer.download.nvidia.com/compute/cuda/repos/$distribution/x86_64/cuda-keyring_1.0-1_all.deb
-sudo dpkg -i cuda-keyring_1.0-1_all.deb
-sudo apt-get update
-sudo apt-get -y install cuda-drivers
-```
-
-[Install CUDA tools](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_network).
-
-```bash
+# sudo apt-get install linux-headers-$(uname -r)
+# distribution=$(. /etc/os-release;echo $ID$VERSION_ID | sed -e 's/\.//g')
+# wget https://developer.download.nvidia.com/compute/cuda/repos/$distribution/x86_64/cuda-keyring_1.1-1_all.deb
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 sudo apt-get update
-sudo apt-get -y install cuda
+sudo apt-get -y install cuda-drivers cuda
 ```
 
 Then, add CUDA to the system path. Add the following line to `~/.profile` or `~/.bashrc`.
